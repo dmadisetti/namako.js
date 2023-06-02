@@ -1,10 +1,12 @@
 entrypoint = "pali.sona"
 
-hidden = [ ".config" ]
+hidden = [ ".config", "package.json", "package-lock.json" ]
+run = "namako pali.sona"
+onBoot = "touch pali.sona"
 
 [interpreter]
 command = [
-    "namako"
+    "namako", "pali.sona"
 ]
 
 [[hints]]
@@ -19,19 +21,14 @@ XDG_CONFIG_HOME = "$REPL_HOME/.config"
 PATH = "$REPL_HOME/.config/npm/node_global/bin:$REPL_HOME/node_modules/.bin"
 npm_config_prefix = "$REPL_HOME/.config/npm/node_global"
 
-# [gitHubImport]
-# requiredFiles = [".replit", "replit.nix"]
+[gitHubImport]
+requiredFiles = [".replit", "replit.nix"]
 
 [packager]
 language = "sona.js"
 
 [languages]
-
 [languages.sona]
 pattern = "**/{*.sona,*.namako}"
-
 [languages.sona.languageServer]
 start = "namako-language-server --stdio"
-
-[deployment]
-run = ["sh", "-c", "namako pali.sona"]
