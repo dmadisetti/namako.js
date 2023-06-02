@@ -7,10 +7,20 @@ const {
     SemanticTokensBuilder,
 } = require('vscode-languageserver');
 
+const { SemanticTokensLegend } = require('vscode-languageserver-types');
+
 const { TextDocument } = require('vscode-languageserver-textdocument');
 
 const connection = createConnection(ProposedFeatures.all);
 const documents = new TextDocuments(TextDocument);
+
+const tokenTypes = ['keyword', 'variable', 'string', 'function', 'variable'];
+const tokenModifiers = [];
+console.log(SemanticTokensLegend)
+const legend = new SemanticTokensLegend(tokenTypes, tokenModifiers);
+
+const controlKeywords = ['ken', 'la'];
+const operateKeywords = ['print', 'number'];
 
 connection.onInitialize((params) => {
     return {
@@ -18,8 +28,8 @@ connection.onInitialize((params) => {
             textDocumentSync: documents.syncKind,
             semanticTokensProvider: {
                 legend: {
-                    tokenTypes: ['keyword', 'variable', 'string'],
-                    tokenModifiers: []
+                    tokenTypes: tokenTypes,
+                    tokenModifiers: tokenModifiers
                 },
                 full: true
             }
@@ -39,15 +49,6 @@ connection.onRequest('textDocument/semanticTokens/full', (params) => {
 
 connection.listen();
 documents.listen(connection);
-
-const controlKeywords = ['work', 'ask'];
-const operateKeywords = ['print', 'number'];
-
-const TokenType = {
-    keyword: 0,
-    variable: 1,
-    string: 2
-};
 
 function validateText(text) {
     const diagnostics = [];
@@ -72,7 +73,7 @@ function validateText(text) {
                         start: { line: i, character: lines[i].indexOf(part) },
                         end: { line: i, character: lines[i].indexOf(part) + part.length },
                     },
-                    message: `${part} is not a valid word.`,
+                    message: `${part}: nimi ike.`,
                     source: 'ex',
                 });
             }
@@ -85,7 +86,7 @@ function validateText(text) {
 function tokenizeDocument(document) {
     const content = document.getText();
     const lines = content.split('\n');
-    const builder = new SemanticTokensBuilder();
+    const builder = new SemanticTokensBuilder(legend);
 
     for (let i = 0; i < lines.length; i++) {
         const parts = lines[i].match(/"[^"]*"|\S+/g);
@@ -96,11 +97,11 @@ function tokenizeDocument(document) {
             const isCapitalized = part[0] === part[0].toUpperCase();
 
             if (part.startsWith('"') && part.endsWith('"')) {
-                builder.push(i, start, length, TokenType.string, 0);
+                builder.push(i, start, length, "string", 0);
             } else if (controlKeywords.includes(part) || operateKeywords.includes(part)) {
-                builder.push(i, start, length, TokenType.keyword, 0);
+                builder.push(i, start, length, "keyword", 0);
             } else if (isCapitalized) {
-                builder.push(i, start, length, TokenType.variable, 0);
+                builder.push(i, start, length, "variable", 0);
             }
         });
     }
