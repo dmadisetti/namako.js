@@ -12,7 +12,7 @@ regex = "Error \\[ERR_REQUIRE_ESM\\]"
 message = "We see that you are using require(...) inside your code. We currently do not support this syntax. Please use 'import' instead when using external modules. (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)"
 
 [nix]
-channel = "stable-22_11"
+channel = "stable-21_11"
 
 [env]
 XDG_CONFIG_HOME = "$REPL_HOME/.config"
@@ -30,7 +30,7 @@ language = "sona.js"
 [languages.sona]
 pattern = "**/{*.sona,*.namako}"
 
-[languages.javascript.languageServer]
+[languages.sona.languageServer]
 start = "namako-language-server --stdio"
 
 [deployment]
