@@ -1,10 +1,10 @@
 { pkgs }:
 let
-  namako = import ./flake.nix {};
+  namako = (import ./flake.nix).outputs {inherit pkgs; self=./.;};
 in {
     deps = [
-      namako.outputs.namako-language-server
-      namako.outputs.namako
+      namako.outputs.packages.x86_64-linux.namako-language-server
+      namako.outputs.packages.x86_64-linux.namako
       pkgs.replitPackages.jest
     ];
 }
