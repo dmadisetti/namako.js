@@ -7,8 +7,6 @@ const {
     SemanticTokensBuilder,
 } = require('vscode-languageserver');
 
-const { SemanticTokensLegend } = require('vscode-languageserver-types');
-
 const { TextDocument } = require('vscode-languageserver-textdocument');
 
 const connection = createConnection(ProposedFeatures.all);
@@ -16,8 +14,6 @@ const documents = new TextDocuments(TextDocument);
 
 const tokenTypes = ['keyword', 'variable', 'string', 'function', 'variable'];
 const tokenModifiers = [];
-console.log(SemanticTokensLegend)
-const legend = new SemanticTokensLegend(tokenTypes, tokenModifiers);
 
 const controlKeywords = ['ken', 'la'];
 const operateKeywords = ['print', 'number'];
@@ -86,7 +82,7 @@ function validateText(text) {
 function tokenizeDocument(document) {
     const content = document.getText();
     const lines = content.split('\n');
-    const builder = new SemanticTokensBuilder(legend);
+    const builder = new SemanticTokensBuilder();
 
     for (let i = 0; i < lines.length; i++) {
         const parts = lines[i].match(/"[^"]*"|\S+/g);
@@ -97,11 +93,11 @@ function tokenizeDocument(document) {
             const isCapitalized = part[0] === part[0].toUpperCase();
 
             if (part.startsWith('"') && part.endsWith('"')) {
-                builder.push(i, start, length, "string", 0);
+                builder.push(i, start, length, "string", []);
             } else if (controlKeywords.includes(part) || operateKeywords.includes(part)) {
-                builder.push(i, start, length, "keyword", 0);
+                builder.push(i, start, length, "keyword", []);
             } else if (isCapitalized) {
-                builder.push(i, start, length, "variable", 0);
+                builder.push(i, start, length, "variable", []);
             }
         });
     }
