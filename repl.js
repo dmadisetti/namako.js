@@ -80,7 +80,7 @@ function run(data) {
         process.exit(1);
       }
     }
-  });
+  }).then(()=>process.exit(0));
 }
 
 function load(){

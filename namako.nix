@@ -38,7 +38,7 @@ let
 in
 {
   packages = createNixNodePackages {
-    namako = { src = ./.; cmd = "node ${./.}/repl.js"; };
+    namako = { src = ./.; cmd = "node ${./.}/repl.js $@"; };
     namako-language-server = { src = ./lsp; cmd = "npm run --prefix ${./lsp} start -- $@"; };
   };
 }
