@@ -24,6 +24,7 @@ function run(data) {
   interperter(async (l, callback, stack)=>{
     if(l > data) {
       console.error(`ike tawa (linja ${l})`);
+      process.stdout.write('\x1b[0m');
       process.exit(1);
       return callback("pini");
     }
@@ -31,9 +32,11 @@ function run(data) {
       let slice = stack.slice(idx);
       if (typeof stack[idx] == 'string'){
         console.log([slice.join('')]);
+        process.stdout.write('\x1b[0m');
       } else{
         if (slice.length == 1) console.log(stack[idx])
         else console.log(slice);
+        process.stdout.write('\x1b[0m');
       }
       idx = stack.length;
     }
@@ -41,6 +44,7 @@ function run(data) {
     let user = l == data.length;
     if(user) {
       line = await prompt(">> ")
+      process.stdout.write('\x1b[0m');
       data.push(line)
     }
     trimmed = line.trim();
@@ -48,6 +52,7 @@ function run(data) {
         let L = trimmed.split(/\s+/).length - 3
         while (queue.length < L) {
           let input = await prompt("?> ");
+          process.stdout.write('\x1b[0m');
           try {
               queue = queue.concat(interperter.evaluate(trimmed));
           } catch(err){
@@ -66,17 +71,21 @@ function run(data) {
           let result = interperter.evaluate(trimmed);
           if (tokens == 1) console.log(result[0])
           else console.log(result);
+          process.stdout.write('\x1b[0m');
         } else {
           try {
             console.log(interperter.expression(trimmed))
+            process.stdout.write('\x1b[0m');
           } catch(err2){
             console.error(err.message)
             console.error(err2.message)
+            process.stdout.write('\x1b[0m');
           }
         }
       } else {
         console.error(err);
         console.error(`ike pali: ${file}`);
+        process.stdout.write('\x1b[0m');
         process.exit(1);
       }
     }
