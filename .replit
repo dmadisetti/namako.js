@@ -1,8 +1,13 @@
 entrypoint = "pali.sona"
 
-hidden = [ ".config", "package.json", "package-lock.json" ]
+hidden = [
+  ".config", "package.json", "package-lock.json",
+  "flake.lock", "repl.js", "sona.js", ".github", "lsp",
+  "test", ".gitignore", "flake.nix", "LICENSE", "namako.nix",
+  "sona.png", "README.md"
+]
 # Create our main file if it does not exist.
-run = "namako $REPL_HOME/pali.sona"
+onBoot = "touch $REPL_HOME/pali.sona"
 compile = "touch $REPL_HOME/pali.sona"
 
 [interpreter]
