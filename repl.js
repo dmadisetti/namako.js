@@ -1,32 +1,39 @@
-
 let path = require('path');
 let fs = require('fs');
 var sona = require("./sona.js");
 const readline = require('readline');
-const util = require('util');
 
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
 
-const prompt = util.promisify(rl.question).bind(rl);
+const prompt = (query) => {
+  return new Promise((resolve) => {
+    rl.question(query, (answer) => {
+      resolve(answer);
+    });
+    process.once('SIGINT', () => {
+      resolve('pini');
+    });
+  });
+};
 
-
-function run(data) {
-  let idx = 0;
+function run(code, interactive, restart, idx, interperter) {
   let queue = [];
-  data = ("\n"+data).split("\n")
-  interperter = sona(()=>{
-    return queue.shift();
-  })
+  idx = idx | 0;
+  data = ("\n"+code).split("\n")
+  if (!interperter) {
+    interperter = sona(()=>{
+      return queue.shift();
+    })
+  }
 
   interperter(async (l, callback, stack)=>{
-    if(l > data) {
+    if(l > data.length) {
       console.error(`ike tawa (linja ${l})`);
       process.stdout.write('\x1b[0m');
       process.exit(1);
-      return callback("pini");
     }
     if (idx < stack.length){
       let slice = stack.slice(idx);
@@ -43,6 +50,7 @@ function run(data) {
     let line = data[l];
     let user = l == data.length;
     if(user) {
+      if (!interactive || restart) return callback("pini");
       line = await prompt(">> ")
       process.stdout.write('\x1b[0m');
       data.push(line)
@@ -89,16 +97,45 @@ function run(data) {
         process.exit(1);
       }
     }
-  }).then(()=>process.exit(0));
+  }).then(()=>{
+    if(!restart) {
+      process.exit(0)
+    }
+    interperter.tawa(data.length);
+    run(code, true, false, idx, interperter);
+  });
 }
 
 function load(){
   let content = ""
-  if (process.argv.length == 3) {
-    const filePath = path.resolve(process.argv[2]);
-        // .then(() => fs.readFile(filePath, 'utf-8'))
-        // .then((data)=>run(data))
-    fs.access(filePath , fs.constants.F_OK, (err) => {
+  let filePath = null;
+    
+  let invalid = process.argv.length > 4;
+  let interactive = true;
+
+  // If there are 3 arguments and the second one is not -i
+  if (process.argv.length === 3 && process.argv[2] !== '-i') {
+    filePath = path.resolve(process.argv[2]);
+    interactive = false;
+  }
+  // If there are 4 arguments
+  else if (process.argv.length === 4) {
+    if (process.argv[2] === '-i') {
+        filePath = path.resolve(process.argv[3]);
+    } else if (process.argv[3] === '-i') {
+        filePath = path.resolve(process.argv[2]);
+    } else {
+      invalid = true;
+    }
+  }
+  if (invalid) {
+    console.error(`ike: pali: namako [-i] [lipu]`);
+    console.error(err);
+    process.exit(1);
+  }
+  if (filePath) {
+    const resolved = path.resolve(filePath);
+    fs.access(resolved , fs.constants.F_OK, (err) => {
         if (err) {
             console.error(`lipu awen: ${filePath}`);
             process.exit(1);
@@ -109,13 +146,13 @@ function load(){
                     console.error(err);
                     process.exit(1);
                 } else {
-                    run(data);
+                    run(data, interactive, interactive);
                 }
             });
         }
     });
   } else {
-    run("")
+    run("", true)
   }
 }
 

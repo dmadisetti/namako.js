@@ -70,13 +70,14 @@ const SONA = (C) => {
             "": () => {}
         };
     A = async (S) => {
-        S=S.call!=V?S:[c=h("\n"+S,/\n/),(i, N)=>N((q=c[i])==V?"pini":q)][1];
+        e=0, S=S.call!=V?S:[c=h("\n"+S,/\n/),(i, N)=>N((q=c[i])==V?"pini":q)][1];
         while (!e) await S(l++, (T)=>U(...s(T.trim())), M);
-        return (M);
+        return M;
     }
     A.token = s
     A.evaluate = (X)=>s(X).map(f)
     A.expression = (X)=>u(...s(X))
+    A.tawa = (X)=>(l=X)
     return A
 }
 

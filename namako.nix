@@ -10,7 +10,7 @@ let
       # We need unzip to build this package
       buildInputs = [ pkgs.nodePackages.node2nix ];
       buildPhase = ''
-        node2nix  --development --strip-optional-dependencies -18 -l package-lock.json
+        node2nix --development --strip-optional-dependencies -18 -l package-lock.json
       '';
       # Installing simply means copying all files to the output directory
       installPhase = ''# Build source files and copy them over.
@@ -33,7 +33,7 @@ let
     pkgs.writeShellScriptBin name ''
       # Script ${name}
       NODE_PATH=${nodeDependencies}/lib/node_modules \
-      PATH=${nodeDependencies}/bin:${pkgs.nodejs}/bin:$PATH ${cmd}
+      PATH=${nodeDependencies}/bin:${pkgs.nodejs}/bin:$PATH exec ${cmd}
     '';
   createNixNodePackages = builtins.mapAttrs (name: attrs: createNixNodePackage ({ inherit name; } // attrs));
 in

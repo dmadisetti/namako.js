@@ -6,7 +6,7 @@ onBoot = "touch pali.sona"
 
 [interpreter]
 command = [
-    "namako", "pali.sona"
+    "namako", "-i", "pali.sona"
 ]
 
 [[hints]]
