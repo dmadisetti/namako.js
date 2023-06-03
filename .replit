@@ -1,17 +1,14 @@
 entrypoint = "pali.sona"
 
 hidden = [ ".config", "package.json", "package-lock.json" ]
-run = "namako pali.sona"
-onBoot = "touch pali.sona"
+# Create our main file if it does not exist.
+run = "namako $REPL_HOME/pali.sona"
+compile = "touch $REPL_HOME/pali.sona"
 
 [interpreter]
 command = [
     "namako", "-i", "pali.sona"
 ]
-
-[[hints]]
-regex = "Error \\[ERR_REQUIRE_ESM\\]"
-message = "We see that you are using require(...) inside your code. We currently do not support this syntax. Please use 'import' instead when using external modules. (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)"
 
 [nix]
 channel = "stable-22_11"

@@ -130,7 +130,7 @@ function load(){
   }
   if (invalid) {
     console.error(`ike: pali: namako [-i] [lipu]`);
-    console.error(err);
+    console.error(process.argv);
     process.exit(1);
   }
   if (filePath) {
