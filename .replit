@@ -7,12 +7,13 @@ hidden = [
   "sona.png", "README.md"
 ]
 # Create our main file if it does not exist.
-onBoot = "touch $REPL_HOME/pali.sona"
+onBoot = "mkdir -p $REPL_HOME && touch $REPL_HOME/pali.sona"
 compile = "touch $REPL_HOME/pali.sona"
+run = "namako"
 
 [interpreter]
 command = [
-    "namako", "-i", "pali.sona"
+    "namako", "-i"
 ]
 
 [nix]
@@ -22,6 +23,8 @@ channel = "stable-22_11"
 XDG_CONFIG_HOME = "$REPL_HOME/.config"
 PATH = "$REPL_HOME/.config/npm/node_global/bin:$REPL_HOME/node_modules/.bin"
 npm_config_prefix = "$REPL_HOME/.config/npm/node_global"
+REPL_LANGUAGE = "sona"
+REPL_PROMPT = ""
 
 [gitHubImport]
 requiredFiles = [".replit", "replit.nix"]

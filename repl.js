@@ -19,6 +19,8 @@ const prompt = (query) => {
   });
 };
 
+const indicator = process.env.REPL_PROMPT || '>';
+
 function run(code, interactive, restart, idx, interperter) {
   let queue = [];
   idx = idx | 0;
@@ -32,18 +34,15 @@ function run(code, interactive, restart, idx, interperter) {
   interperter(async (l, callback, stack)=>{
     if(l > data.length) {
       console.error(`ike tawa (linja ${l})`);
-      process.stdout.write('\x1b[0m');
       process.exit(1);
     }
     if (idx < stack.length){
       let slice = stack.slice(idx);
       if (typeof stack[idx] == 'string'){
         console.log([slice.join('')]);
-        process.stdout.write('\x1b[0m');
       } else{
         if (slice.length == 1) console.log(stack[idx])
         else console.log(slice);
-        process.stdout.write('\x1b[0m');
       }
       idx = stack.length;
     }
@@ -51,18 +50,16 @@ function run(code, interactive, restart, idx, interperter) {
     let user = l == data.length;
     if(user) {
       if (!interactive || restart) return callback("pini");
-      line = await prompt(">> ")
-      process.stdout.write('\x1b[0m');
+      line = await prompt(`${indicator}${indicator} `)
       data.push(line)
     }
     trimmed = line.trim();
     if (trimmed.startsWith("o pana e ")) {
         let L = trimmed.split(/\s+/).length - 3
         while (queue.length < L) {
-          let input = await prompt("?> ");
-          process.stdout.write('\x1b[0m');
+          let input = (await prompt(`?${indicator} `)).trim();
           try {
-              queue = queue.concat(interperter.evaluate(trimmed));
+            queue = queue.concat(interperter.evaluate(input));
           } catch(err){
             console.error(err);
           }
@@ -79,22 +76,17 @@ function run(code, interactive, restart, idx, interperter) {
           let result = interperter.evaluate(trimmed);
           if (tokens == 1) console.log(result[0])
           else console.log(result);
-          process.stdout.write('\x1b[0m');
         } else {
           try {
             console.log(interperter.expression(trimmed))
-            process.stdout.write('\x1b[0m');
           } catch(err2){
-            console.error(err.message)
+            console.error(err.message.split("(")[0])
             console.error(err2.message)
-            process.stdout.write('\x1b[0m');
           }
         }
       } else {
         console.error(err);
-        console.error(`ike pali: ${file}`);
-        process.stdout.write('\x1b[0m');
-        process.exit(1);
+        interperter.tawa(data.length);
       }
     }
   }).then(()=>{
