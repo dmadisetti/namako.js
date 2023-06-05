@@ -16,7 +16,7 @@ let
       installPhase = ''# Build source files and copy them over.
             mkdir -p $out/
             cp *.json $out/
-            # lol and but not the flake file since the hash would have to be
+            # lol but not the flake file since the hash would have to be
             # dependent on itself.
             cp default.nix $out/
             cp node-env.nix $out/
@@ -31,7 +31,7 @@ let
       nodeDependencies = builtPackage.shell.nodeDependencies;
     in
     pkgs.writeShellScriptBin name ''
-      # Script ${name}
+      # Script ${name}#cache-bust=0
       NODE_PATH=${nodeDependencies}/lib/node_modules \
       PATH=${nodeDependencies}/bin:${pkgs.nodejs}/bin:$PATH exec ${cmd}
     '';
@@ -40,6 +40,6 @@ in
 {
   packages = createNixNodePackages {
     namako = { src = ./.; cmd = "node ${./.}/repl.js $@"; };
-    namako-language-server = { src = ./lsp; cmd = "npm run --prefix ${./lsp} start -- $@"; };
+    namako-language-server = { src = ./lsp; cmd = "npm run --prefix ${./lsp} start   -- $@"; };
   };
 }
