@@ -1,12 +1,10 @@
-# toki sona
+# toki sona namako
 [![tests](https://github.com/dmadisetti/sona.js/actions/workflows/tests.yml/badge.svg)](https://github.com/dmadisetti/sona.js/actions/workflows/tests.yml)
 [![playground](https://img.shields.io/badge/playground-sona-white.svg?logo=observable)](https://observablehq.com/@dmadisetti/sona)
 
-a simple language with a 1000 character interpreter inspired by toki pona
+Successor to sona, under construction
 
 ---
-
-![toki sona pi toki sona](https://raw.githubusercontent.com/dmadisetti/sona.js/main/sona.png)
 
 ## example sona program (calculates the first 10 primes)
 ```

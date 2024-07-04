@@ -1,4 +1,4 @@
-var sona = require("../sona.js");
+var sona = require("../namako.js");
 
 var assert = require('assert');
 var fs = require("fs");

@@ -1,6 +1,6 @@
 let path = require('path');
 let fs = require('fs');
-var sona = require("./sona.js");
+var namako = require("./namako.js");
 const readline = require('readline');
 
 const rl = readline.createInterface({
@@ -26,7 +26,7 @@ function run(code, interactive, restart, idx, interperter) {
   idx = idx | 0;
   data = ("\n"+code).split("\n")
   if (!interperter) {
-    interperter = sona(()=>{
+    interperter = namako(()=>{
       return queue.shift();
     })
   }
