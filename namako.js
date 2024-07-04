@@ -4,7 +4,7 @@
 // A toki pona inspired interperted language.
 
 const NAMAKO = (C) => {
-    let cc, c, q, r, a, op, z, V,
+    let cc, c, q, r, a, op, z, V, L,
         v = (x)=>({
             "ala": 0,
             "wan": 1,
