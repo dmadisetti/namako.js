@@ -70,7 +70,7 @@ const NAMAKO = (C) => {
             "pini": P(0, () => (e = 1)),
             "": () => {}
         };
-    A = async (S) => {
+    let A = async (S) => {
         e=0, S=S.call!=V?S:[c=h("\n"+S,/\n/),(i, N)=>N((q=c[i])==V?"pini":q)][1];
         while (!e) await S(l++, (T)=>U(...s(T.trim())), M);
         return M;
