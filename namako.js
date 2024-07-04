@@ -5,7 +5,7 @@
 
 const NAMAKO = (C) => {
     let cc, c, q, r, a, op, z, V,
-        v = (x)=>{
+        v = (x)=>({
             "ala": 0,
             "wan": 1,
             "tu": 2,
@@ -14,7 +14,7 @@ const NAMAKO = (C) => {
             "linja": 13,
             "ale": 100,
             "nasa": (Math.random()*256)|0
-        }[x],
+        }[x]),
         e = 0,
         l = 0,
         M = [];
